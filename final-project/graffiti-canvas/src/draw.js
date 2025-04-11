@@ -3,6 +3,8 @@
     handles html canvas drawing 
 */
 import { addGraffiti } from "./ar.js";
+import { firebaseDB, firebaseCollection, firebaseAddDoc, firebaseServerTimestamp } from "./index.js";
+
 
 let canvas;
 let ctx;
