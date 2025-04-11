@@ -68,18 +68,26 @@ const setupControls = () => {
     });
 
     // save button
-    document.getElementById('save-button').onclick = () => {
+    document.getElementById('save-button').onclick = async () => {
         const imgData = canvas.toDataURL("image/png");
 
         // add graffiti to scene
         addGraffiti(imgData);
 
+        try{
+            const docRef = await firebaseAddDoc(firebaseCollection(firebaseDB, "graffiti"), {
+                image: imgData, //storing the image as a base64 string
+                timestamp: firebaseServerTimestamp()
+            });
+            console.log("document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("error adding doc: ", e);
+        }
+
+
         // hide drawing panel
         drawingPanel.style.display = 'none';
     }
-
-    // display drawing panel
-    drawingPanel.style.display = 'block';
 }
 
 // Drawing helpers
