@@ -71,73 +71,82 @@ const setupControls = () => {
     document.getElementById('save-button').onclick = () => {
         const imgData = canvas.toDataURL("image/png");
 
-        // add graffiti to scene
+        //save the graffiti data to Firestore
+        firebaseAddDoc(firebaseCollection(firebaseDB, "graffiti"), {
+            image: imgData,
+
+            //timestamp to keep track of when it was saved
+            timestamp: firebaseServerTimestamp()
+        })
+            .then(() => {
+                console.log("Graffiti saved to Firestore!");
+            })
+            .catch((error) => {
+                console.error("Error saving graffiti: ", error);
+            });
+
+        // Add graffiti to the AR scene
         addGraffiti(imgData);
 
-        // hide drawing panel
+        // Hide the drawing panel
         drawingPanel.style.display = 'none';
+    };
+    // Drawing helpers
+    const drawLine = (x1, y1, x2, y2) => {
+        ctx.save();
+        ctx.lineWidth = lineWidth;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.restore();
     }
 
-    // display drawing panel
-    drawingPanel.style.display = 'block';
-}
-
-// Drawing helpers
-const drawLine = (x1,y1,x2,y2) => {
-    ctx.save();
-    ctx.lineWidth = lineWidth;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-    ctx.restore();
-}
-
-const drawCircle = (x,y) => {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, lineWidth / 2, 0, 2 * Math.PI);
-    ctx.fillStyle = lineColor;
-    ctx.fill();
-    ctx.restore();
-}
-
-const drawLoop = () => {
-    if (isDrawing) {
-        drawCircle(mouseX,mouseY);
-        drawLine(lastX,lastY,mouseX,mouseY);
+    const drawCircle = (x, y) => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, lineWidth / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = lineColor;
+        ctx.fill();
+        ctx.restore();
     }
 
-    setTimeout(drawLoop, 1);
-}
+    const drawLoop = () => {
+        if (isDrawing) {
+            drawCircle(mouseX, mouseY);
+            drawLine(lastX, lastY, mouseX, mouseY);
+        }
 
-const startDraw = () => {
-    //clearCanvas();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawLoop();
-}
+        setTimeout(drawLoop, 1);
+    }
 
-const clearCanvas = () => { // defunct possibly
-    ctx.save();
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-}
+    const startDraw = () => {
+        //clearCanvas();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawLoop();
+    }
 
-const drawInit = () => {
-    canvas = document.getElementById('whiteboard');
-    ctx = canvas.getContext('2d');
+    const clearCanvas = () => { // defunct possibly
+        ctx.save();
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+    }
 
-    rect = canvas.getBoundingClientRect();
+    const drawInit = () => {
+        canvas = document.getElementById('whiteboard');
+        ctx = canvas.getContext('2d');
 
-    let canvasOffsetX = canvas.offsetLeft;
-    let canvasOffsetY = canvas.offsetTop;
+        rect = canvas.getBoundingClientRect();
 
-    canvas.width = window.innerWidth - canvasOffsetX;
-    canvas.height = window.innerHeight - canvasOffsetY;
+        let canvasOffsetX = canvas.offsetLeft;
+        let canvasOffsetY = canvas.offsetTop;
 
-    setupControls();
-    startDraw();
-}
+        canvas.width = window.innerWidth - canvasOffsetX;
+        canvas.height = window.innerHeight - canvasOffsetY;
 
-export { drawInit };
+        setupControls();
+        startDraw();
+    }
+
+    export { drawInit };

@@ -8,6 +8,16 @@ let assets;
 // temp for while assets are purely stored in html
 let imgIndex;
 
+
+
+//firebase functions
+const db = window.firebaseDB;
+const dbRef = window.firebaseRef(db, 'graffiti');
+const push = window.firebasePush;
+const onChildAdded = window.firebaseOnChildAdded;
+
+
+
 const arInit = () => {
     assets = document.querySelector('a-assets');
 
@@ -22,10 +32,29 @@ const arInit = () => {
     });
 
     imgIndex = 0;
+
+    //firebase listen for updates
+    onChildAdded(dbRef, snapshot => {
+        const { data } = snapshot.val();
+        spawnGraffiti(data);
+    });
 }
 
-// add graffiti to ar scene
+
 const addGraffiti = (imgData) => {
+    //save to firebase
+    push(dbRef, {
+        data: imgData,
+        timestamp: Date.now()
+    });
+
+    //local add to firebase
+    spawnGraffiti(imgData);
+}
+
+
+// add graffiti to ar scene
+const spawnGraffiti = (imgData) => {
     // create img element
     let img = document.createElement('img');
     img.src = imgData;

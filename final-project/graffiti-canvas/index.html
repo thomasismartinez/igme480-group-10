@@ -46,29 +46,33 @@
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-      import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-    
-      // Your Firebase config (with added databaseURL)
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+      
+      // Your Firebase config
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
       const firebaseConfig = {
         apiKey: "AIzaSyBmJysavnJA5Ox7WGuYoalqVIlvD8HrMiw",
         authDomain: "ar-graffiti-28639.firebaseapp.com",
-        databaseURL: "https://ar-graffiti-28639-default-rtdb.firebaseio.com", // ✅ Add this!
         projectId: "ar-graffiti-28639",
-        storageBucket: "ar-graffiti-28639.appspot.com",
+        storageBucket: "ar-graffiti-28639.firebasestorage.app",
         messagingSenderId: "268341100020",
         appId: "1:268341100020:web:f1be34821ebbca3ee40da1",
         measurementId: "G-BNR1ENN566"
       };
     
+      // Initialize Firebase
       const app = initializeApp(firebaseConfig);
-      const db = getDatabase(app);
     
-      // Expose Firebase tools globally so ar.js and draw.js can use them
+      // Initialize Firestore
+      const db = getFirestore(app);
+    
+      // Expose Firebase tools globally for use in other scripts (ar.js and draw.js)
       window.firebaseDB = db;
-      window.firebaseRef = (path) => ref(db, path);
-      window.firebasePush = push;
-      window.firebaseOnChildAdded = onChildAdded;
+      window.firebaseCollection = collection;
+      window.firebaseAddDoc = addDoc;
+      window.firebaseServerTimestamp = serverTimestamp;
     </script>
+    
 
 
 
