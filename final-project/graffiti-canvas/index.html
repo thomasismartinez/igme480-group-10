@@ -10,8 +10,6 @@
     <!-- AR.js Location -->
     <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/3.4.5/three.js/build/ar-threex-location-only.js'></script>
 
-    <script src="./src/index.js" type="module"></script>
-
     <link href="styles.css" rel="stylesheet">
 
     <title>Graffiti Test</title>
@@ -44,5 +42,39 @@
         </canvas>
         <button id="save-button">Save</button>
     </div>
+
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+      import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+    
+      // Your Firebase config (with added databaseURL)
+      const firebaseConfig = {
+        apiKey: "AIzaSyBmJysavnJA5Ox7WGuYoalqVIlvD8HrMiw",
+        authDomain: "ar-graffiti-28639.firebaseapp.com",
+        databaseURL: "https://ar-graffiti-28639-default-rtdb.firebaseio.com", // ✅ Add this!
+        projectId: "ar-graffiti-28639",
+        storageBucket: "ar-graffiti-28639.appspot.com",
+        messagingSenderId: "268341100020",
+        appId: "1:268341100020:web:f1be34821ebbca3ee40da1",
+        measurementId: "G-BNR1ENN566"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+    
+      // Expose Firebase tools globally so ar.js and draw.js can use them
+      window.firebaseDB = db;
+      window.firebaseRef = (path) => ref(db, path);
+      window.firebasePush = push;
+      window.firebaseOnChildAdded = onChildAdded;
+    </script>
+
+
+
+    <script src="./src/index.js" type="module"></script>
+
+
+
   </body>
 </html>
