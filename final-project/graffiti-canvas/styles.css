@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+/* possibly defunt */
+#draw-begin-button {
+    background-color: aqua;
+    font-weight: bold;
+    font-size: large;
+    border: solid;
+    width: 100px;
+    height: 50px;
+    border-color: blue;
+    border-width: 5px;
+    border-radius: 10px; 
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+}
+
+#drawing-panel {
+    display: none;
+    z-index: 1;
+}
+
+#whiteboard {
+    border-style: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#save-button {
+    background-color: greenyellow;
+    font-weight: bold;
+    font-size: large;
+    border: solid;
+    width: 100px;
+    height: 50px;
+    border-color: rgb(31, 206, 31);
+    border-width: 5px;
+    border-radius: 10px;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+}

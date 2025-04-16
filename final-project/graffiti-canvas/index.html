@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <!-- we use three.js to handle raycasting -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex.js"></script>
+    <!-- AR.js A-Frame components -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- AR.js Location -->
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/3.4.5/three.js/build/ar-threex-location-only.js'></script>
+
+    <link href="styles.css" rel="stylesheet">
+
+    <title>Graffiti Test</title>
+  </head>
+  <body style="margin: 0; overflow: hidden;">
+    <!-- AR scene -->
+    <a-scene embedded arjs vr-mode-ui='enabled: false' raycaster cursor="rayOrigin: mouse" arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+        <!-- <img> elements are stored here as referances for scene images-->
+        <a-assets>
+        </a-assets>
+        
+        <a-marker preset="hiro">
+            <!--a-image src="#graffiti-img"></a-image-->
+            <a-entity
+                clicker
+                id="house"
+                position="0 0 0"
+                scale="0.5 0.5 0.5"
+                rotation="0 90 0"
+                gltf-model="https://people.rit.edu/~tjm7126/igme480/workshop3/house1.glb"
+            ></a-entity>
+        </a-marker>
+    </a-scene>
+
+    <!-- standard HTML -->
+    <!--button id="draw-begin-button">Draw</button-->
+    <div id="drawing-panel">
+        <canvas id="whiteboard">
+            Your browser does not support the HTML canvas tag.
+        </canvas>
+        <button id="save-button">Save</button>
+    </div>
+
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+      
+      // Your Firebase config
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyBmJysavnJA5Ox7WGuYoalqVIlvD8HrMiw",
+        authDomain: "ar-graffiti-28639.firebaseapp.com",
+        projectId: "ar-graffiti-28639",
+        storageBucket: "ar-graffiti-28639.firebasestorage.app",
+        messagingSenderId: "268341100020",
+        appId: "1:268341100020:web:f1be34821ebbca3ee40da1",
+        measurementId: "G-BNR1ENN566"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    
+      // Initialize Firestore
+      const db = getFirestore(app);
+    
+      // Expose Firebase tools globally for use in other scripts (ar.js and draw.js)
+      window.firebaseDB = db;
+      window.firebaseCollection = collection;
+      window.firebaseAddDoc = addDoc;
+      window.firebaseServerTimestamp = serverTimestamp;
+    </script>
+    
+
+
+
+    <script src="./src/index.js" type="module"></script>
+
+
+
+  </body>
+</html>
