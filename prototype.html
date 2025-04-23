@@ -7,14 +7,17 @@
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <style>
         /* General page styling */
-        body, html {
+        body,
+        html {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #11a0cb, #2575fc); /* Gradient background */
+            background: linear-gradient(135deg, #11a0cb, #2575fc);
+            /* Gradient background */
             color: #fff;
             text-align: center;
-            overflow-y: auto; /* Ensure vertical scrolling is enabled */
+            overflow-y: auto;
+            /* Ensure vertical scrolling is enabled */
         }
 
         h1 {
@@ -90,6 +93,14 @@
             height: 100%;
             display: block;
         }
+
+        #contributions {
+            width: 500px;
+            margin: 20px auto;
+            /* Center horizontally */
+            text-align: center;
+            /* Center text inside */
+        }
     </style>
 </head>
 
@@ -118,7 +129,30 @@
         </a-scene>
     </div>
 
+    <div id="contributions">
+        <h1>Contributions:</h1>
+        <h3>Sawyer</h3>
+        <p>I made the gh pages workflow and this page for the blog posts.</p>
+        <h3>Thomas</h3>
+        <p>In order to allow the user to create grafitti, I used html5 canvas to create a simple drawing, that then
+            saves the user's drawing as a png. That png is then inserted into the AR.js scene as an image, positioned in
+            front of the houses halls.</p>
+        <h3>Presley</h3>
+        <p>My main contribution was integrating Firebase Firestore into our AR graffiti project to enable saving and
+            loading graffiti artwork. I implemented the functionality to upload the user's canvas drawing as a
+            base64-encoded image to Firestore when they clicked "Done," and also created a system to retrieve those
+            saved images and display them in the AR scene. This allowed graffiti to persist between sessions and made
+            the experience feel more collaborative and interactive.</p>
+        <h3>Julian</h3>
+        <p>I made the 3D model for the house seen above.</p>
+    </div>
     <!-- Video Section -->
+    <div class="video-container">
+        <video controls>
+            <source src="prototype/demos/prototype-a.mov" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
     <div class="video-container">
         <video controls>
             <source src="prototype/demos/prototype-b.mov" type="video/mp4">
