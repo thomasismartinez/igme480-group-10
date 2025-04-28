@@ -12,9 +12,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #11a0cb, #2575fc);
-            /* Gradient background */
-            color: #fff;
+            color: #000000;
             text-align: center;
             overflow-y: auto;
             /* Ensure vertical scrolling is enabled */
@@ -22,7 +20,7 @@
             /* Ensure the background overlay works properly */
         }
 
-        /* Static background image with low opacity */
+        /* Combine gradient and image in the same layer */
         body::before {
             content: '';
             position: fixed;
@@ -30,10 +28,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://miro.medium.com/v2/resize:fit:1400/1*wPCzp6hVb7LACKL8b4MUoA.jpeg');
+            background: linear-gradient(135deg, #11a0cb, #2575fc),
+                url('https://miro.medium.com/v2/resize:fit:1400/1*wPCzp6hVb7LACKL8b4MUoA.jpeg');
             background-size: cover;
+            background-blend-mode: overlay;
+            /* Blend the gradient and image */
             background-position: center;
-            opacity: 0.2;
+            opacity: 0.3;
             /* Adjust opacity for a subtle effect */
             z-index: -1;
             /* Ensure it stays behind all content */
@@ -41,7 +42,7 @@
 
         h1 {
             margin-top: 20px;
-            color: #fff;
+            color: #2575fc;
         }
 
         p {
@@ -160,6 +161,34 @@
         #story a:hover {
             text-decoration: underline;
         }
+
+        /* Styling for the video container */
+        .video-row {
+            display: flex;
+            justify-content: center;
+            /* Center the videos horizontally */
+            flex-wrap: wrap;
+            /* Wrap videos if the screen is too small */
+            gap: 20px;
+            /* Add spacing between videos */
+        }
+
+        /* Styling for the video container */
+        .video-container {
+            width: 20%;
+            /* Adjust width to fit two videos side by side */
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
     </style>
 </head>
 
@@ -210,75 +239,62 @@
         </div>
 
         <h1>Model:</h1>
+
+        <!-- Wrap the A-Frame scene in a styled div -->
+        <div class="scene-container">
+            <a-scene embedded id="aframe-scene">
+                <!-- Add a light source -->
+                <a-light type="directional" position="1 1 1"></a-light>
+                <!-- Add a camera -->
+                <a-camera position="0 0 3" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
+                <!-- Display the .glb model -->
+                <a-entity gltf-model="prototype/assets/house.glb" position="0 0 0" scale="1 1 1"></a-entity>
+            </a-scene>
+        </div>
+
+
+        <!-- Video Section -->
+        <div class="video-row">
+            <div class="video-container">
+                <video controls>
+                    <source src="prototype/demos/prototype-a.mov" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-container">
+                <video controls>
+                    <source src="prototype/demos/prototype-b.mov" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <script>
+            const scene = document.getElementById('aframe-scene');
+            const camera = scene.querySelector('a-camera');
+
+            // Enable mouse controls when fullscreen is activated
+            document.addEventListener('fullscreenchange', () => {
+                if (document.fullscreenElement === scene) {
+                    camera.setAttribute('look-controls', 'enabled: true');
+                    camera.setAttribute('wasd-controls', 'enabled: true');
+                } else {
+                    camera.setAttribute('look-controls', 'enabled: false');
+                    camera.setAttribute('wasd-controls', 'enabled: false');
+                }
+            });
+
+            // Add a double-click event to toggle fullscreen for the scene
+            scene.addEventListener('dblclick', () => {
+                if (!document.fullscreenElement) {
+                    scene.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        </script>
     </div>
 
-    <!-- Wrap the A-Frame scene in a styled div -->
-    <div class="scene-container">
-        <a-scene embedded id="aframe-scene">
-            <!-- Add a light source -->
-            <a-light type="directional" position="1 1 1"></a-light>
-            <!-- Add a camera -->
-            <a-camera position="0 0 3" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
-            <!-- Display the .glb model -->
-            <a-entity gltf-model="prototype/assets/house.glb" position="0 0 0" scale="1 1 1"></a-entity>
-        </a-scene>
-    </div>
-
-    <div id="contributions">
-        <h1>Contributions:</h1>
-        <h3>Sawyer</h3>
-        <p>I made the gh pages workflow and this page for the blog posts.</p>
-        <h3>Thomas</h3>
-        <p>In order to allow the user to create grafitti, I used html5 canvas to create a simple drawing, that then
-            saves the user's drawing as a png. That png is then inserted into the AR.js scene as an image, positioned in
-            front of the houses halls.</p>
-        <h3>Presley</h3>
-        <p>My main contribution was integrating Firebase Firestore into our AR graffiti project to enable saving and
-            loading graffiti artwork. I implemented the functionality to upload the user's canvas drawing as a
-            base64-encoded image to Firestore when they clicked "Done," and also created a system to retrieve those
-            saved images and display them in the AR scene. This allowed graffiti to persist between sessions and made
-            the experience feel more collaborative and interactive.</p>
-        <h3>Julian</h3>
-        <p>I made the 3D model for the house seen above.</p>
-    </div>
-    <!-- Video Section -->
-    <div class="video-container">
-        <video controls>
-            <source src="prototype/demos/prototype-a.mov" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-    <div class="video-container">
-        <video controls>
-            <source src="prototype/demos/prototype-b.mov" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-
-    <script>
-        const scene = document.getElementById('aframe-scene');
-        const camera = scene.querySelector('a-camera');
-
-        // Enable mouse controls when fullscreen is activated
-        document.addEventListener('fullscreenchange', () => {
-            if (document.fullscreenElement === scene) {
-                camera.setAttribute('look-controls', 'enabled: true');
-                camera.setAttribute('wasd-controls', 'enabled: true');
-            } else {
-                camera.setAttribute('look-controls', 'enabled: false');
-                camera.setAttribute('wasd-controls', 'enabled: false');
-            }
-        });
-
-        // Add a double-click event to toggle fullscreen for the scene
-        scene.addEventListener('dblclick', () => {
-            if (!document.fullscreenElement) {
-                scene.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        });
-    </script>
 </body>
 
 </html>
